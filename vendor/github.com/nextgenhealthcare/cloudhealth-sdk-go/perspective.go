@@ -87,6 +87,8 @@ var emptyPerspective = Perspective{
 // ErrPerspectiveNotFound is returned when a Perspective doesn't exist on Read
 var ErrPerspectiveNotFound = errors.New("Perspective not found")
 
+type Group map[string]interface{}
+
 const StaticGroupType = "Static Group"
 const DynamicGroupType = "Dynamic Group"
 const DynamicGroupBlockType = "Dynamic Group Block"
