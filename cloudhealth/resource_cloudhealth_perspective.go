@@ -194,14 +194,14 @@ func resourceCloudHealthPerspectiveRead(d *schema.ResourceData, m interface{}) e
 	perspective, err := client.GetPerspective(id)
 
 	switch err {
+	case nil:
+		return buildPerspective(perspective, d)
 	case cloudhealth.ErrPerspectiveNotFound:
 		d.SetId("")
 		return nil
 	default:
 		return fmt.Errorf("Error when reading perspective %s: %v", id, err)
 	}
-
-	return buildPerspective(perspective, d)
 }
 
 func resourceCloudHealthPerspectiveUpdate(d *schema.ResourceData, m interface{}) error {
