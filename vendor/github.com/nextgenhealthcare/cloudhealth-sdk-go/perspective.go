@@ -219,7 +219,7 @@ func (s *Client) CreatePerspective(perspective *Perspective) (string, error) {
 	case http.StatusNotFound:
 		return "", ErrPerspectiveNotFound
 	default:
-		return "", fmt.Errorf("Unknown Response with CloudHealth: `%d` when sending:\n%v", resp.StatusCode, body)
+		return "", fmt.Errorf("Unknown Response with CloudHealth: `%d` when sending:\n%v", resp.StatusCode, string(body))
 	}
 }
 
@@ -263,7 +263,7 @@ func (s *Client) UpdatePerspective(perspectiveID string, perspective *Perspectiv
 	case http.StatusUnprocessableEntity:
 		return nil, fmt.Errorf("Bad Request. Please check if a Perspective with this name `%s` already exists", perspective.Schema.Name)
 	default:
-		return nil, fmt.Errorf("Unknown Response with CloudHealth: `%d` when sending:\n%v", resp.StatusCode, body)
+		return nil, fmt.Errorf("Unknown Response with CloudHealth: `%d` when sending:\n%v", resp.StatusCode, string(body))
 	}
 }
 
