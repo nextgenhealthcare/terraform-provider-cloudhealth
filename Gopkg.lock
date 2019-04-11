@@ -396,11 +396,11 @@
 
 [[projects]]
   branch = "perspectives"
-  digest = "1:9e9dc485b6f72b2b7ac9230d5d40661c8e89c8dac0d53573ec417f3431640251"
+  digest = "1:7a6bc558b86d861d63d7bee5c0775926611391592df6f4782926004d6b2093d6"
   name = "github.com/nextgenhealthcare/cloudhealth-sdk-go"
   packages = ["."]
   pruneopts = "UT"
-  revision = "fb37935b682b754caa3282e2f44527919102e6cc"
+  revision = "022a23987fa5b2fb4d6ba84d494203d343967ee7"
   source = "github.com/flix-tech/cloudhealth-sdk-go"
 
 [[projects]]
