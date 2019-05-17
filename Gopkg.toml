@@ -32,6 +32,7 @@
 [[constraint]]
   branch = "master"
   name = "github.com/nextgenhealthcare/cloudhealth-sdk-go"
+  source = "github.com/flix-tech/cloudhealth-sdk-go"
 
 [prune]
   go-tests = true
