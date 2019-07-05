@@ -21,6 +21,7 @@ func Provider() terraform.ResourceProvider {
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"cloudhealth_aws_account": resourceCloudHealthAwsAccount(),
+			"cloudhealth_perspective": resourceCloudHealthPerspective(),
 		},
 		ConfigureFunc: providerConfigure,
 	}
