@@ -265,6 +265,8 @@ github.com/neelance/astrewrite v0.0.0-20160511093645-99348263ae86/go.mod h1:kHJE
 github.com/neelance/sourcemap v0.0.0-20151028013722-8c68805598ab/go.mod h1:Qr6/a/Q4r9LP1IltGz7tA7iOK1WonHEYhu1HRBA7ZiM=
 github.com/nextgenhealthcare/cloudhealth-sdk-go v0.0.0-20190520214618-12df2a90cb97 h1:nyRtRAGb3Q478OjhZ6cvib2CJueoNpHErhXzP8gBHlw=
 github.com/nextgenhealthcare/cloudhealth-sdk-go v0.0.0-20190520214618-12df2a90cb97/go.mod h1:zlAU6wEmVzxxLmyudDB8jQOTeY3ppRVdCjQu2uANgE8=
+github.com/nextgenhealthcare/cloudhealth-sdk-go v0.0.0-20200413131328-6fb1cd037126 h1:JlynP1uQuX6wcvZQeCVfWbbEAs+TRu2hDaHr1gKKLcQ=
+github.com/nextgenhealthcare/cloudhealth-sdk-go v0.0.0-20200413131328-6fb1cd037126/go.mod h1:zlAU6wEmVzxxLmyudDB8jQOTeY3ppRVdCjQu2uANgE8=
 github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d h1:VhgPp6v9qf9Agr/56bj7Y/xa04UccTW04VP0Qed4vnQ=
 github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d/go.mod h1:YUTz3bUH2ZwIWBy3CJBeOBEugqcmXREj14T+iG/4k4U=
 github.com/oklog/run v1.0.0 h1:Ru7dDtJNOyC66gQ5dQmaCa0qIsAUFY3sFpK1Xk8igrw=
