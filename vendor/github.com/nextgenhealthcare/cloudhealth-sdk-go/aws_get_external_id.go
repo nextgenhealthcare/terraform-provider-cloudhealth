@@ -23,7 +23,7 @@ func (s *Client) GetAwsExternalID() (string, error) {
 	req, err := http.NewRequest("GET", url.String(), nil)
 
 	client := &http.Client{
-		Timeout: time.Second * 15,
+		Timeout: time.Second * time.Duration(s.Timeout),
 	}
 	resp, err := client.Do(req)
 	if err != nil {

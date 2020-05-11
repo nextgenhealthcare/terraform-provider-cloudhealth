@@ -113,7 +113,7 @@ func (s *Client) GetAllPerspectives() (*PerspectiveMap, error) {
 	req, err := http.NewRequest("GET", url.String(), nil)
 
 	client := &http.Client{
-		Timeout: time.Second * 15,
+		Timeout: time.Second * time.Duration(s.Timeout),
 	}
 	resp, err := client.Do(req)
 	if err != nil {
@@ -148,7 +148,7 @@ func (s *Client) GetPerspective(id string) (*Perspective, error) {
 	req, err := http.NewRequest("GET", url.String(), nil)
 
 	client := &http.Client{
-		Timeout: time.Second * 15,
+		Timeout: time.Second * time.Duration(s.Timeout),
 	}
 	resp, err := client.Do(req)
 	if err != nil {
@@ -193,7 +193,7 @@ func (s *Client) CreatePerspective(perspective *Perspective) (string, error) {
 	req.Header.Add("Content-Type", "application/json")
 
 	client := &http.Client{
-		Timeout: time.Second * 15,
+		Timeout: time.Second * time.Duration(s.Timeout),
 	}
 	resp, err := client.Do(req)
 	if err != nil {
@@ -234,7 +234,7 @@ func (s *Client) UpdatePerspective(perspectiveID string, perspective *Perspectiv
 	req.Header.Add("Content-Type", "application/json")
 
 	client := &http.Client{
-		Timeout: time.Second * 15,
+		Timeout: time.Second * time.Duration(s.Timeout),
 	}
 	resp, err := client.Do(req)
 	if err != nil {
@@ -295,7 +295,7 @@ func (s *Client) deletePerspectiveCall(id string, opts ...map[string]string) err
 	req, err := http.NewRequest("DELETE", url.String(), nil)
 
 	client := &http.Client{
-		Timeout: time.Second * 15,
+		Timeout: time.Second * time.Duration(s.Timeout),
 	}
 	resp, err := client.Do(req)
 	if err != nil {

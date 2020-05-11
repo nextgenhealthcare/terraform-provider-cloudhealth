@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strconv"
 	"time"
 )
 
@@ -16,6 +17,11 @@ type AwsAccount struct {
 	ID             int                      `json:"id"`
 	Name           string                   `json:"name"`
 	Authentication AwsAccountAuthentication `json:"authentication"`
+}
+
+// AwsAccounts is a structure to unmarshal CloudHealth GET accounts results into
+type AwsAccounts struct {
+	Accounts []AwsAccount `json:"aws_accounts"`
 }
 
 // AwsAccountAuthentication represents the authentication details for AWS integration.
@@ -31,6 +37,73 @@ type AwsAccountAuthentication struct {
 // It's useful for ignoring errors (e.g. delete if exists).
 var ErrAwsAccountNotFound = errors.New("AWS Account not found")
 
+// getPaginatedAwsAccounts retrieves a page of results for the GetAllAwsAccounts function
+func getPaginatedAwsAccounts(client *http.Client, req *http.Request, page, perPage int) (*AwsAccounts, error) {
+	var accountsPage = new(AwsAccounts)
+
+	q := req.URL.Query()
+	q.Set("per_page", strconv.Itoa(perPage))
+	q.Set("page", strconv.Itoa(page))
+	req.URL.RawQuery = q.Encode()
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	switch resp.StatusCode {
+	case http.StatusOK:
+		err = json.Unmarshal(responseBody, &accountsPage)
+		if err != nil {
+			return nil, err
+		}
+		return accountsPage, nil
+	case http.StatusUnauthorized:
+		return nil, ErrClientAuthenticationError
+	case http.StatusNotFound:
+		return nil, ErrAwsAccountNotFound
+	default:
+		return nil, fmt.Errorf("Unknown Response from CloudHealth: `%d`", resp.StatusCode)
+	}
+}
+
+// GetAllAwsAccounts gets all AWS Accounts
+func (s *Client) GetAllAwsAccounts(perPage int) ([]AwsAccount, error) {
+	var accounts []AwsAccount
+
+	// Establish our HTTP client
+	relativeURL, _ := url.Parse(fmt.Sprintf("aws_accounts?api_key=%s", s.ApiKey))
+	apiUrl := s.EndpointURL.ResolveReference(relativeURL)
+	req, err := http.NewRequest("GET", apiUrl.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+	client := &http.Client{
+		Timeout: time.Second * time.Duration(s.Timeout),
+	}
+
+	// Get Paginated results for AWS accounts endpoint
+	// CloudHealth starts counting pages at 1 (but also accepts 0 which has results identical to 1)
+	for pageNo, pageLen := 1, perPage; pageLen == perPage; pageNo++ {
+		accountsPage, err := getPaginatedAwsAccounts(client, req, pageNo, perPage)
+		if err != nil {
+			return nil, err
+		}
+		accounts = append(accounts, accountsPage.Accounts...)
+		pageLen = len(accountsPage.Accounts)
+	}
+	if err != nil {
+		return nil, err
+	}
+	return accounts, nil
+}
+
 // GetAwsAccount gets the AWS Account with the specified CloudHealth Account ID.
 func (s *Client) GetAwsAccount(id int) (*AwsAccount, error) {
 
@@ -40,7 +113,7 @@ func (s *Client) GetAwsAccount(id int) (*AwsAccount, error) {
 	req, err := http.NewRequest("GET", url.String(), nil)
 
 	client := &http.Client{
-		Timeout: time.Second * 15,
+		Timeout: time.Second * time.Duration(s.Timeout),
 	}
 	resp, err := client.Do(req)
 	if err != nil {
@@ -83,7 +156,7 @@ func (s *Client) CreateAwsAccount(account AwsAccount) (*AwsAccount, error) {
 	req.Header.Add("Content-Type", "application/json")
 
 	client := &http.Client{
-		Timeout: time.Second * 15,
+		Timeout: time.Second * time.Duration(s.Timeout),
 	}
 	resp, err := client.Do(req)
 	if err != nil {
@@ -126,7 +199,7 @@ func (s *Client) UpdateAwsAccount(account AwsAccount) (*AwsAccount, error) {
 	req.Header.Add("Content-Type", "application/json")
 
 	client := &http.Client{
-		Timeout: time.Second * 15,
+		Timeout: time.Second * time.Duration(s.Timeout),
 	}
 	resp, err := client.Do(req)
 	if err != nil {
@@ -166,7 +239,7 @@ func (s *Client) DeleteAwsAccount(id int) error {
 	req, err := http.NewRequest("DELETE", url.String(), nil)
 
 	client := &http.Client{
-		Timeout: time.Second * 15,
+		Timeout: time.Second * time.Duration(s.Timeout),
 	}
 	resp, err := client.Do(req)
 	if err != nil {
